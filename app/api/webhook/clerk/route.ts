@@ -6,6 +6,10 @@ import { clerkClient } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
  
 export async function POST(req: Request) {
+
+  console.log('webhook called')
+  //Stop the execution for 9 seconds to simulate a long running process
+   await new Promise(resolve => setTimeout(resolve, 9000));
  
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
@@ -66,6 +70,7 @@ export async function POST(req: Request) {
       photo: image_url,
     }
 
+    console.log(user)
     const newUser = await createUser(user);
 
     if(newUser) {
@@ -90,6 +95,8 @@ export async function POST(req: Request) {
     }
 
     const updatedUser = await updateUser(id, user)
+
+
 
     return NextResponse.json({ message: 'OK', user: updatedUser })
   }
